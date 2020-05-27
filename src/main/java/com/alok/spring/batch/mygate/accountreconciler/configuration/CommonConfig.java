@@ -1,8 +1,11 @@
 package com.alok.spring.batch.mygate.accountreconciler.configuration;
 
 import com.alok.spring.batch.mygate.accountreconciler.model.BankTransaction;
+import com.alok.spring.batch.mygate.accountreconciler.model.Header;
 import com.alok.spring.batch.mygate.accountreconciler.processor.FileArchiveTasklet;
+import com.alok.spring.batch.mygate.accountreconciler.repository.HeaderRepository;
 import com.alok.spring.batch.mygate.accountreconciler.utils.FileScanner;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.FlatFileItemWriter;
@@ -14,7 +17,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
+import java.util.Collections;
+import java.util.List;
+
 @Configuration
+@Slf4j
 public class CommonConfig {
     @Value("${file.input.mygate.dir}")
     private String myGateInputDir;
@@ -48,19 +55,26 @@ public class CommonConfig {
     }
 
     @Bean
-    ItemWriter<BankTransaction> myGateReconcileTransactionWriter() {
+    ItemWriter<BankTransaction> myGateReconcileTransactionWriter(HeaderRepository headerRepository) {
         String outputFileName = outputDirName + "Bank_Reconciled_" + System.currentTimeMillis() + ".csv";
         Resource csvFile = new FileSystemResource(outputFileName);
+
 
         FlatFileItemWriter<BankTransaction> csvTransactionWriter = new FlatFileItemWriter<>();
         csvTransactionWriter.setResource(csvFile);
         csvTransactionWriter.setShouldDeleteIfExists(true);
         csvTransactionWriter.setShouldDeleteIfEmpty(true);
         csvTransactionWriter.setHeaderCallback(writer -> {
-            writer.write("Jyothi GT Enclave\n");
-            writer.write("Bank Reconciliation for the period 01/04/2020 to 31/03/2021\n");
-            writer.write("Opening Balance,0,,Closing Balance,292756.00,,,dd-mm-yyyy\n");
-            writer.write("Id,Date,Doc & No,Description,Cheque No,Debit,Credit,Bank Date");
+            List<Header> headers = headerRepository.findAll();
+            Collections.sort(headers, (h1, h2) -> h1.getId().compareTo(h2.getId()));
+            int hRowNum = 0;
+            for (Header header: headers) {
+                ++hRowNum;
+                if (hRowNum == headers.size())
+                    writer.write(header.getLine());
+                else
+                    writer.write(header.getLine() + "\n");
+            }
         });
         csvTransactionWriter.setLineAggregator(new DelimitedLineAggregator<BankTransaction>() {
             {
