@@ -33,7 +33,7 @@ public class FileScanner {
     public List<String> getFiles() {
         Assert.notNull(dirPath, "Directory Path must be set!");
         File dir = new File(dirPath);
-        log.debug("Scanning dir {} for file {}", dirPath, fileRegex);
+        log.info("Scanning dir {} for file {}", dirPath, fileRegex);
 
         try (Stream<Path> walk = Files.walk(Paths.get(dirPath), 1)) {
             return walk
