@@ -2,6 +2,8 @@ package com.alok.spring.batch.mygate.accountreconciler.configuration;
 
 import com.alok.spring.batch.mygate.accountreconciler.model.BankTransaction;
 import com.alok.spring.batch.mygate.accountreconciler.processor.FileArchiveTasklet;
+import com.alok.spring.batch.mygate.accountreconciler.processor.SkipLineProcessor;
+import com.alok.spring.batch.mygate.accountreconciler.repository.HeaderRepository;
 import com.alok.spring.batch.mygate.accountreconciler.utils.MyGateFieldSetMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -39,6 +41,12 @@ public class MyGateAccountReconcilerConfig {
     @Autowired
     private FileArchiveTasklet fileArchiveTasklet;
 
+    @Autowired
+    private SkipLineProcessor skipLineProcessor;
+
+    @Autowired
+    private HeaderRepository headerRepository;
+
     @Bean("MyGateReconcileTransactionJob")
     public Job myGateReconcileTransactionJob(JobBuilderFactory jobBuilderFactory,
                                           StepBuilderFactory stepBuilderFactory,
@@ -70,12 +78,14 @@ public class MyGateAccountReconcilerConfig {
             @Value("#{jobParameters['FileName']}") String fileName
     ) {
 
+        headerRepository.deleteAll();
         FlatFileItemReader<BankTransaction> flatFileItemReader = new FlatFileItemReader<>();
         flatFileItemReader.setName("MyGate-CSV-Reader");
         flatFileItemReader.setResource(new FileSystemResource(fileName));
         flatFileItemReader.setLineMapper(mygateTransactionLineMapper());
         flatFileItemReader.setStrict(false);
         flatFileItemReader.setLinesToSkip(4);
+        flatFileItemReader.setSkippedLinesCallback(skipLineProcessor);
         flatFileItemReader.setRecordSeparatorPolicy(new DefaultRecordSeparatorPolicy() {
             @Override
             public boolean isEndOfRecord(String line) {
