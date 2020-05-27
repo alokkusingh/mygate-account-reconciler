@@ -68,6 +68,7 @@ public class HdfcBankAccountReconcilerConfig {
     ) {
         log.debug("Initializing hdfcExcelReader");
         log.debug("fileName: {}", fileName);
+
         ExcelReader<HdfcBankTransaction> itemReader = new ExcelReader<>();
         itemReader.setRowExtractor(hdfcRowExtractor());
         itemReader.setResource(new PathResource(fileName));
