@@ -5,4 +5,4 @@ ${Ansi.GREEN}|  '-'  /   \   '   ' '-' '   |  |   |  | |  | |  |   '  '--'  |   
 ${Ansi.GREEN} `-----'  .-'  /     `---'    `--'   `--' `--' `--'    `------'    `--'     `------' `--''--'  `---' `--'  `--`--'    `--'     `----'
 ${Ansi.GREEN}          `---'
 ${Ansi.RED} :: Spring Boot${spring-boot.formatted-version} :: MyGate Account Reconciler
-${Ansi.RED} :: Check Logs ${project.basedir}/log/spring-batch.log
+${Ansi.BLUE} :: Check Logs ${project.basedir}/log/spring-batch.log
