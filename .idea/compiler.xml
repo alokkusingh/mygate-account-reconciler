@@ -6,15 +6,18 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="account-reconciler" />
         <module name="mygate-account-reconciler" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="account-reconciler" target="1.8" />
       <module name="mygate-account-reconciler" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="account-reconciler" options="-parameters" />
       <module name="mygate-account-reconciler" options="-parameters" />
     </option>
   </component>
