@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/account-reconciler.iml" filepath="$PROJECT_DIR$/account-reconciler.iml" />
       <module fileurl="file://$PROJECT_DIR$/mygate-account-reconciler.iml" filepath="$PROJECT_DIR$/mygate-account-reconciler.iml" />
     </modules>
   </component>
