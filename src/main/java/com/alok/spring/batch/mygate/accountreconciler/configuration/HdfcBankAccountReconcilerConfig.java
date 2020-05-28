@@ -26,11 +26,6 @@ import org.springframework.core.io.PathResource;
 @EnableBatchProcessing
 @Slf4j
 public class HdfcBankAccountReconcilerConfig {
-    @Value("${fields.name.bank.hdfc:#{null}}")
-    private String[] fieldNames;
-
-    @Value("${file.path.reconciled}")
-    String outputFileName;
 
     @Autowired
     private FileArchiveTasklet fileArchiveTasklet;
@@ -78,7 +73,6 @@ public class HdfcBankAccountReconcilerConfig {
 
     @Bean
     public HdfcRowExtractor hdfcRowExtractor() {
-        HdfcRowExtractor hdfcRowExtractor = new HdfcRowExtractor();
-        return hdfcRowExtractor;
+        return new HdfcRowExtractor();
     }
 }

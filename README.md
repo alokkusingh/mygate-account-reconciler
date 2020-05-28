@@ -1,4 +1,4 @@
-MyGate Bank transactions reconciliation against actual back transaction
+MyGate Bank transactions reconciliation against actual bank transaction
 
 ### Build
 

@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,14 +33,13 @@ public class FileScanner {
 
     public List<String> getFiles() {
         Assert.notNull(dirPath, "Directory Path must be set!");
-        File dir = new File(dirPath);
         log.info("Scanning dir {} for file {}", dirPath, fileRegex);
 
         try (Stream<Path> walk = Files.walk(Paths.get(dirPath), 1)) {
             return walk
                     .filter(Files::isRegularFile)
                     .filter(file -> Pattern.matches(fileRegex,file.getFileName().toString()))
-                    .map(file -> file.toString())
+                    .map(Path::toString)
                     .collect(Collectors.toList());
         } catch (IOException e) {
             e.printStackTrace();

@@ -89,18 +89,13 @@ public class MyGateAccountReconcilerConfig {
         flatFileItemReader.setRecordSeparatorPolicy(new DefaultRecordSeparatorPolicy() {
             @Override
             public boolean isEndOfRecord(String line) {
-                if (line == null
+                return line == null
                         || "Jyothi GT Enclave".equals(line)
                         || line.startsWith("Bank Reconciliation")
                         || line.startsWith("Opening Balance")
                         || line.startsWith("Id,Date,Doc")
                         || line.contains("Txn Id:")
-                        || line.contains("Payment")
-                ) {
-                    return true;
-                } else {
-                    return false;
-                }
+                        || line.contains("Payment");
             }
 
             @Override

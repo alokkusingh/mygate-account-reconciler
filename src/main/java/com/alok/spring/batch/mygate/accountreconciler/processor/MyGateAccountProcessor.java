@@ -13,13 +13,13 @@ import org.springframework.stereotype.Component;
 @Component("myGateAccountProcessor")
 public class MyGateAccountProcessor implements ItemProcessor<BankTransaction, BankTransaction> {
     @Autowired
-    BankTransactionRepository bankTransactionRepository;
+    private BankTransactionRepository bankTransactionRepository;
 
     @Autowired
-    HdfcBankTransactionRepository hdfcBankTransactionRepository;
+    private HdfcBankTransactionRepository hdfcBankTransactionRepository;
 
     @Override
-    public BankTransaction process(BankTransaction myGateBankTransaction) throws Exception {
+    public BankTransaction process(BankTransaction myGateBankTransaction) {
         if (myGateBankTransaction.getUtrNo() != null && myGateBankTransaction.getUtrNo().length() > 0) {
             HdfcBankTransaction hdfcBankTransaction = hdfcBankTransactionRepository.findOneByUtrNo(myGateBankTransaction.getUtrNo());
             if (hdfcBankTransaction != null) {

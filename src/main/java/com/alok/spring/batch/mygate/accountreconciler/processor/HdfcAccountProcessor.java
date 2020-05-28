@@ -14,13 +14,13 @@ import org.springframework.stereotype.Component;
 @Component("hdfcAccountProcessor")
 public class HdfcAccountProcessor implements ItemProcessor<HdfcBankTransaction, BankTransaction> {
     @Autowired
-    BankTransactionRepository bankTransactionRepository;
+    private BankTransactionRepository bankTransactionRepository;
 
     @Autowired
-    HdfcBankTransactionRepository hdfcBankTransactionRepository;
+    private HdfcBankTransactionRepository hdfcBankTransactionRepository;
 
     @Override
-    public BankTransaction process(HdfcBankTransaction hdfcTransaction) throws Exception {
+    public BankTransaction process(HdfcBankTransaction hdfcTransaction) {
         log.debug("hdfcTransaction: {}", hdfcTransaction);
         BankTransaction myGateBankTransaction = null;
         if (hdfcTransaction.getUtrNo() != null) {

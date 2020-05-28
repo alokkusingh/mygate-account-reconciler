@@ -18,9 +18,6 @@ public class DefaultFieldExtractor {
         };
 
         patterns = new LinkedList<>();
-        for (String strPattern: stringPatterns) {
-            patterns.add(Pattern.compile(strPattern));
-        }
     }
 
     public void setStringPatterns(String[] stringPatterns) {
@@ -32,7 +29,7 @@ public class DefaultFieldExtractor {
     }
 
     public String getField(String line) {
-        Matcher m = null;
+        Matcher m;
         for (Pattern pattern: patterns) {
             m = pattern.matcher(line);
             if (m.find()) {

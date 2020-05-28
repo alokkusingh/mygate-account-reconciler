@@ -2,7 +2,10 @@ package com.alok.spring.batch.mygate.accountreconciler;
 
 import com.alok.spring.batch.mygate.accountreconciler.utils.FileScanner;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.*;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -38,7 +41,7 @@ public class MygateAccountReconcilerApplication {
 	private JobExecution myGateJobExecution;
 	private JobExecution hdfcJobExecution;
 
-	private Object mutex = new Object();
+	private final Object mutex = new Object();
 
 
 	public static void main(String[] args) {

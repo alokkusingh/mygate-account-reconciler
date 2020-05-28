@@ -27,7 +27,7 @@ public class FileArchiveTasklet implements Tasklet, InitializingBean {
         return RepeatStatus.FINISHED;
     }
 
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         Assert.notNull(resource, "resource must be set");
     }
 }
