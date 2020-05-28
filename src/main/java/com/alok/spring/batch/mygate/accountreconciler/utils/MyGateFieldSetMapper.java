@@ -20,18 +20,16 @@ public class MyGateFieldSetMapper implements FieldSetMapper<BankTransaction> {
 
     @Override
     public BankTransaction mapFieldSet(FieldSet fieldSet) {
-        BankTransaction transaction = new BankTransaction();
-        transaction.setId(fieldSet.readLong("id"));
-        transaction.setDate(fieldSet.readDate("date"));
-        transaction.setDocNo(fieldSet.readString("docNo"));
-        transaction.setDescription(fieldSet.readString("description"));
-        transaction.setChequeNo(fieldSet.readString("chequeNo"));
-        transaction.setDebit(fieldSet.readDouble("debit"));
-        transaction.setCredit(fieldSet.readDouble("credit"));
-        String strBankDate = fieldSet.readString("bankDate");
-        if (strBankDate.length() > 0) {
-            transaction.setBankDate(fieldSet.readDate("bankDate"));
-        }
+        BankTransaction transaction = BankTransaction.builder()
+                .id(fieldSet.readLong("id"))
+                .date(fieldSet.readDate("date"))
+                .docNo(fieldSet.readString("docNo"))
+                .description(fieldSet.readString("description"))
+                .chequeNo(fieldSet.readString("chequeNo"))
+                .debit(fieldSet.readDouble("debit"))
+                .credit(fieldSet.readDouble("credit"))
+                .bankDate(fieldSet.readString("bankDate").length()>0?fieldSet.readDate("bankDate"):null)
+                .build();
 
         enrichTransaction(transaction);
 
