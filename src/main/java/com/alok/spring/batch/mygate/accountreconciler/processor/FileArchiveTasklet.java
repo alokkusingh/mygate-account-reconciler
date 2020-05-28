@@ -21,8 +21,8 @@ public class FileArchiveTasklet implements Tasklet, InitializingBean {
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
 
        File file = resource.getFile();
-       file.renameTo(new File(file.getAbsoluteFile().getAbsolutePath() + ".processed"));
-       log.info("File renamed to {}.{}", file, "processed");
+       file.renameTo(new File(file.getAbsoluteFile().getAbsolutePath() + "." + System.currentTimeMillis() + ".processed"));
+       log.info("File renamed to {}.{}.{}", file, System.currentTimeMillis(), "processed");
 
         return RepeatStatus.FINISHED;
     }
