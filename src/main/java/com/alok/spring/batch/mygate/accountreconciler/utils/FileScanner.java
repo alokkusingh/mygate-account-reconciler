@@ -20,6 +20,8 @@ import java.util.stream.Stream;
 public class FileScanner {
 
     private String dirPath;
+    
+    @Builder.Default
     private String fileRegex = ".*";
 
     public void setDirPath(String dirPath) {
