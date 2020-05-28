@@ -25,6 +25,7 @@ public class HdfcBankTransaction {
     private String closingBalance;
 
     @Transient
+    @Builder.Default
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public String getBankDateAsString() {
