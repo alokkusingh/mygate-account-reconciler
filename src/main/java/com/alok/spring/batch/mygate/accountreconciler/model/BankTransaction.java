@@ -30,6 +30,7 @@ public class BankTransaction {
     private String utrNo;
 
     @Transient
+    @Builder.Default
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public String getDescriptionWithQuot() {
