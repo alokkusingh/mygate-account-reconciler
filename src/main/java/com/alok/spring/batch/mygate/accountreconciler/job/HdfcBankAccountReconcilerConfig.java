@@ -1,10 +1,11 @@
-package com.alok.spring.batch.mygate.accountreconciler.configuration;
+package com.alok.spring.batch.mygate.accountreconciler.job;
 
 import com.alok.spring.batch.mygate.accountreconciler.model.BankTransaction;
 import com.alok.spring.batch.mygate.accountreconciler.model.HdfcBankTransaction;
 import com.alok.spring.batch.mygate.accountreconciler.processor.FileArchiveTasklet;
 import com.alok.spring.batch.mygate.accountreconciler.utils.ExcelReader;
 import com.alok.spring.batch.mygate.accountreconciler.utils.HdfcRowExtractor;
+import com.alok.spring.batch.mygate.accountreconciler.utils.ReconcileReport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -30,6 +31,9 @@ public class HdfcBankAccountReconcilerConfig {
     @Autowired
     private FileArchiveTasklet fileArchiveTasklet;
 
+    @Autowired
+    private ReconcileReport reconcileReport;
+
     @Bean("HdfcReconcileTransactionJob")
     public Job hdfcReconcileTransactionJob(JobBuilderFactory jobBuilderFactory,
                                              StepBuilderFactory stepBuilderFactory,
@@ -53,6 +57,7 @@ public class HdfcBankAccountReconcilerConfig {
                 .incrementer(new RunIdIncrementer())
                 .start(step0)
                 .next(step1)
+                .listener(reconcileReport)
                 .build();
     }
 

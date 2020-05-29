@@ -56,18 +56,14 @@ public class MygateAccountReconcilerApplication {
 		log.info("Got files: {}", files);
 		for (String file: files) {
 			JobParameters params = new JobParametersBuilder()
+					.addString("JobName", "MyGateTransactionReconciliationJob")
 					.addString("JobID", String.valueOf(System.currentTimeMillis()))
 					.addString("FileName", file)
 					.toJobParameters();
 
-			log.info("Job performMyGateBankTransactionLoad waiting to start processing: {}", file);
 			synchronized (mutex) {
-				if (myGateJobExecution != null)
-					myGateJobExecution.stop();
-				log.info("Job performMyGateBankTransactionLoad started processing: {}", file);
 				myGateJobExecution = jobLauncher.run(myGateReconcileTransactionJob, params);
 			}
-			log.info("Job performMyGateBankTransactionLoad completed processing: {}", file);
 		}
 	}
 
@@ -77,19 +73,15 @@ public class MygateAccountReconcilerApplication {
 		List<String> files = hdfcFileScanner.getFiles();
 		log.info("Got files: {}", files);
 		for (String file: files) {
-			log.info("Job performMyGateBankTransactionLoad waiting to start processing: {}", file);
 			JobParameters params = new JobParametersBuilder()
+					.addString("JobName", "HdfcTransactionReconciliationJob")
 					.addString("JobID", String.valueOf(System.currentTimeMillis()))
 					.addString("FileName", file)
 					.toJobParameters();
 
 			synchronized (mutex) {
-				if (hdfcJobExecution != null)
-					hdfcJobExecution.stop();
-				log.info("Job performMyGateBankTransactionLoad started processing: {}", file);
 				hdfcJobExecution = jobLauncher.run(hdfcReconcileTransactionJob, params);
 			}
-			log.info("Job performMyGateBankTransactionLoad completed processing: {}", file);
 		}
 	}
 }

@@ -25,7 +25,7 @@ public class MyGateAccountProcessor implements ItemProcessor<BankTransaction, Ba
     @Override
     public BankTransaction process(BankTransaction myGateBankTransaction) {
         if (skipReconciledRecord && myGateBankTransaction.getBankDate() != null) {
-            log.info("Skipping already reconciled record -\tId: {},\tUTR No: {}", myGateBankTransaction.getId(),myGateBankTransaction.getUtrNo());
+            log.info("Skipping already reconciled record - Id: {},\tUTR No: {}", myGateBankTransaction.getId(),myGateBankTransaction.getUtrNo());
             return null;
         }
 

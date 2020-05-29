@@ -1,10 +1,11 @@
-package com.alok.spring.batch.mygate.accountreconciler.configuration;
+package com.alok.spring.batch.mygate.accountreconciler.job;
 
 import com.alok.spring.batch.mygate.accountreconciler.model.BankTransaction;
 import com.alok.spring.batch.mygate.accountreconciler.processor.FileArchiveTasklet;
 import com.alok.spring.batch.mygate.accountreconciler.processor.SkipLineProcessor;
 import com.alok.spring.batch.mygate.accountreconciler.repository.HeaderRepository;
 import com.alok.spring.batch.mygate.accountreconciler.utils.MyGateFieldSetMapper;
+import com.alok.spring.batch.mygate.accountreconciler.utils.ReconcileReport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -47,6 +48,9 @@ public class MyGateAccountReconcilerConfig {
     @Autowired
     private HeaderRepository headerRepository;
 
+    @Autowired
+    private ReconcileReport reconcileReport;
+
     @Bean("MyGateReconcileTransactionJob")
     public Job myGateReconcileTransactionJob(JobBuilderFactory jobBuilderFactory,
                                           StepBuilderFactory stepBuilderFactory,
@@ -69,6 +73,7 @@ public class MyGateAccountReconcilerConfig {
                 .incrementer(new RunIdIncrementer())
                 .start(step0)
                 .next(step1)
+                .listener(reconcileReport)
                 .build();
     }
 
