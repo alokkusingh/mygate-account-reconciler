@@ -31,7 +31,7 @@ public class BankTransaction {
 
     @Transient
     @Builder.Default
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-YYYY");
 
     public String getDescriptionWithQuot() {
         return "\"" + description + "\"";
