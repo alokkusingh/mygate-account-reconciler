@@ -83,4 +83,15 @@
 		</plugins>
 	</build>
 
+	<!--
+	Note: "github" repository definition is present in setting.xml
+	-->
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>GitHub Packages</name>
+			<url>https://maven.pkg.github.com/alokkusingh/mygate-account-reconciler</url>
+		</repository>
+	</distributionManagement>
+
 </project>
