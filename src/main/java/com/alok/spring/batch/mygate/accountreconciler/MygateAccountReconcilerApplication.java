@@ -1,5 +1,6 @@
 package com.alok.spring.batch.mygate.accountreconciler;
 
+import com.alok.spring.batch.mygate.accountreconciler.annotation.LogExecutionTime;
 import com.alok.spring.batch.mygate.accountreconciler.utils.FileScanner;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -49,6 +50,7 @@ public class MygateAccountReconcilerApplication {
 	}
 
 
+	@LogExecutionTime
 	@Scheduled(cron = "1 * * * * ?")
 	public void performMyGateBankTransactionLoad() throws Exception
 	{
@@ -67,6 +69,7 @@ public class MygateAccountReconcilerApplication {
 		}
 	}
 
+	@LogExecutionTime
 	@Scheduled(cron = "30 * * * * ?")
 	public void performHdfcBankTransactionLoad() throws Exception
 	{
