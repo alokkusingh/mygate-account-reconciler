@@ -19,7 +19,7 @@ public class LogExecutionTime {
 
         final long executionTime = System.currentTimeMillis() - start;
 
-        log.info("{} executed in {} ms", joinPoint.getSignature(), executionTime);
+        log.info("{} executed in {} ms", joinPoint.toShortString(), executionTime);
 
         return returnObject;
     }
