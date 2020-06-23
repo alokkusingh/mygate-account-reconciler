@@ -20,22 +20,28 @@ public class MyGateFieldSetMapper implements FieldSetMapper<BankTransaction> {
 
     @Override
     public BankTransaction mapFieldSet(FieldSet fieldSet) {
-        BankTransaction transaction = BankTransaction.builder()
-                .id(fieldSet.readLong("id"))
-                .date(fieldSet.readDate("date"))
-                .docNo(fieldSet.readString("docNo"))
-                .description(fieldSet.readString("description"))
-                .chequeNo(fieldSet.readString("chequeNo"))
-                .debit(fieldSet.readDouble("debit"))
-                .credit(fieldSet.readDouble("credit"))
-                .bankDate(fieldSet.readString("bankDate").length()>0?fieldSet.readDate("bankDate"):null)
-                .build();
+        try {
+            BankTransaction transaction = BankTransaction.builder()
+                    .id(fieldSet.readLong("id"))
+                    .date(fieldSet.readDate("date"))
+                    .docNo(fieldSet.readString("docNo"))
+                    .description(fieldSet.readString("description"))
+                    .chequeNo(fieldSet.readString("chequeNo"))
+                    .debit(fieldSet.readDouble("debit"))
+                    .credit(fieldSet.readDouble("credit"))
+                    .bankDate(fieldSet.readString("bankDate").length() > 0 ? fieldSet.readDate("bankDate") : null)
+                    .build();
 
-        enrichTransaction(transaction);
+            enrichTransaction(transaction);
 
-        log.debug("Mapped transaction {}", transaction);
+            log.debug("Mapped transaction {}", transaction);
 
-        return transaction;
+            return transaction;
+        } catch (Exception e) {
+            log.error("Error parsing record: {}", fieldSet.toString());
+            log.error(e.getMessage(), e);
+        }
+        return null;
     }
 
     private void enrichTransaction(BankTransaction transaction) {
