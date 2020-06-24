@@ -1,9 +1,9 @@
 package com.alok.spring.batch.mygate.accountreconciler.processor;
 
 import com.alok.spring.batch.mygate.accountreconciler.model.BankTransaction;
-import com.alok.spring.batch.mygate.accountreconciler.model.HdfcBankTransaction;
+import com.alok.spring.batch.mygate.accountreconciler.model.BankAccountTransaction;
 import com.alok.spring.batch.mygate.accountreconciler.repository.BankTransactionRepository;
-import com.alok.spring.batch.mygate.accountreconciler.repository.HdfcBankTransactionRepository;
+import com.alok.spring.batch.mygate.accountreconciler.repository.BankAccountTransactionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class MyGateAccountProcessor implements ItemProcessor<BankTransaction, Ba
     private BankTransactionRepository bankTransactionRepository;
 
     @Autowired
-    private HdfcBankTransactionRepository hdfcBankTransactionRepository;
+    private BankAccountTransactionRepository bankAccountTransactionRepository;
 
     @Value("${record.skip.reconciled:true}")
     Boolean skipReconciledRecord;
@@ -30,10 +30,10 @@ public class MyGateAccountProcessor implements ItemProcessor<BankTransaction, Ba
         }
 
         if (myGateBankTransaction.getUtrNo() != null && myGateBankTransaction.getUtrNo().length() > 0) {
-            HdfcBankTransaction hdfcBankTransaction = hdfcBankTransactionRepository.findOneByUtrNo(myGateBankTransaction.getUtrNo());
-            if (hdfcBankTransaction != null) {
-               if (hdfcBankTransaction.getBankDate() != null) {
-                   myGateBankTransaction.setBankDate(hdfcBankTransaction.getBankDate());
+            BankAccountTransaction bankAccountTransaction = bankAccountTransactionRepository.findOneByUtrNo(myGateBankTransaction.getUtrNo());
+            if (bankAccountTransaction != null) {
+               if (bankAccountTransaction.getBankDate() != null) {
+                   myGateBankTransaction.setBankDate(bankAccountTransaction.getBankDate());
                }
             }
         }

@@ -35,6 +35,12 @@ public class CommonConfig {
     @Value("${file.input.hdfc.file}")
     private String hdfcInputFile;
 
+    @Value("${file.input.idfc.dir}")
+    private String idfcInputDir;
+
+    @Value("${file.input.idfc.file}")
+    private String idfcInputFile;
+
     @Value("${dir.path.reconciled}")
     String outputDirName;
 
@@ -51,6 +57,14 @@ public class CommonConfig {
         return FileScanner.builder()
                 .dirPath(hdfcInputDir)
                 .fileRegex(hdfcInputFile)
+                .build();
+    }
+
+    @Bean
+    FileScanner idfcFileScanner() {
+        return FileScanner.builder()
+                .dirPath(idfcInputDir)
+                .fileRegex(idfcInputFile)
                 .build();
     }
 

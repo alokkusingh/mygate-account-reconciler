@@ -1,10 +1,10 @@
 package com.alok.spring.batch.mygate.accountreconciler.job;
 
-import com.alok.spring.batch.mygate.accountreconciler.model.BankTransaction;
 import com.alok.spring.batch.mygate.accountreconciler.model.BankAccountTransaction;
+import com.alok.spring.batch.mygate.accountreconciler.model.BankTransaction;
 import com.alok.spring.batch.mygate.accountreconciler.processor.FileArchiveTasklet;
-import com.alok.spring.batch.mygate.accountreconciler.utils.ExcelReader;
-import com.alok.spring.batch.mygate.accountreconciler.utils.HdfcRowExtractor;
+import com.alok.spring.batch.mygate.accountreconciler.utils.ExcelxReader;
+import com.alok.spring.batch.mygate.accountreconciler.utils.IdfcRowExtractor;
 import com.alok.spring.batch.mygate.accountreconciler.utils.ReconcileReport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -26,7 +26,7 @@ import org.springframework.core.io.PathResource;
 @Configuration
 @EnableBatchProcessing
 @Slf4j
-public class HdfcBankAccountReconcilerConfig {
+public class IdfcBankAccountReconcilerConfig {
 
     @Autowired
     private FileArchiveTasklet fileArchiveTasklet;
@@ -34,26 +34,26 @@ public class HdfcBankAccountReconcilerConfig {
     @Autowired
     private ReconcileReport reconcileReport;
 
-    @Bean("HdfcReconcileTransactionJob")
-    public Job hdfcReconcileTransactionJob(JobBuilderFactory jobBuilderFactory,
+    @Bean("IdfcReconcileTransactionJob")
+    public Job idfcReconcileTransactionJob(JobBuilderFactory jobBuilderFactory,
                                              StepBuilderFactory stepBuilderFactory,
-                                             ItemReader<BankAccountTransaction> hdfcExcelReader,
+                                             ItemReader<BankAccountTransaction> idfcExcelReader,
                                              ItemProcessor<BankAccountTransaction, BankTransaction> bankAccountProcessor,
                                              ItemWriter<BankTransaction> myGateReconcileTransactionWriter
     ) {
-        Step step0 = stepBuilderFactory.get("HDFC-ETL-file-load")
+        Step step0 = stepBuilderFactory.get("IDFC-ETL-file-load")
                 .<BankAccountTransaction,BankTransaction>chunk(999)
-                .reader(hdfcExcelReader)
+                .reader(idfcExcelReader)
                 .processor(bankAccountProcessor)
                 .writer(myGateReconcileTransactionWriter)
                 .build();
 
 
-        Step step1 = stepBuilderFactory.get("HDFC-ETL-file-archive")
+        Step step1 = stepBuilderFactory.get("IDFC-ETL-file-archive")
                 .tasklet(fileArchiveTasklet)
                 .build();
 
-        return jobBuilderFactory.get("HDFC-ETL")
+        return jobBuilderFactory.get("IDFC-ETL")
                 .incrementer(new RunIdIncrementer())
                 .start(step0)
                 .next(step1)
@@ -63,21 +63,21 @@ public class HdfcBankAccountReconcilerConfig {
 
     @Bean
     @JobScope
-    public ExcelReader<BankAccountTransaction> hdfcExcelReader(
+    public ExcelxReader<BankAccountTransaction> idfcExcelReader(
             @Value("#{jobParameters['FileName']}") String fileName
     ) {
-        log.debug("Initializing hdfcExcelReader");
+        log.debug("Initializing idfcExcelReader");
         log.debug("fileName: {}", fileName);
 
-        ExcelReader<BankAccountTransaction> itemReader = new ExcelReader<>();
-        itemReader.setRowExtractor(hdfcRowExtractor());
+        ExcelxReader<BankAccountTransaction> itemReader = new ExcelxReader<>();
+        itemReader.setRowExtractor(idfcRowExtractor());
         itemReader.setResource(new PathResource(fileName));
 
         return itemReader;
     }
 
     @Bean
-    public HdfcRowExtractor hdfcRowExtractor() {
-        return new HdfcRowExtractor();
+    public IdfcRowExtractor idfcRowExtractor() {
+        return new IdfcRowExtractor();
     }
 }

@@ -1,9 +1,9 @@
 package com.alok.spring.batch.mygate.accountreconciler.processor;
 
 import com.alok.spring.batch.mygate.accountreconciler.model.BankTransaction;
-import com.alok.spring.batch.mygate.accountreconciler.model.HdfcBankTransaction;
+import com.alok.spring.batch.mygate.accountreconciler.model.BankAccountTransaction;
 import com.alok.spring.batch.mygate.accountreconciler.repository.BankTransactionRepository;
-import com.alok.spring.batch.mygate.accountreconciler.repository.HdfcBankTransactionRepository;
+import com.alok.spring.batch.mygate.accountreconciler.repository.BankAccountTransactionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,27 +11,27 @@ import org.springframework.stereotype.Component;
 
 
 @Slf4j
-@Component("hdfcAccountProcessor")
-public class HdfcAccountProcessor implements ItemProcessor<HdfcBankTransaction, BankTransaction> {
+@Component("bankAccountProcessor")
+public class BankAccountProcessor implements ItemProcessor<BankAccountTransaction, BankTransaction> {
     @Autowired
     private BankTransactionRepository bankTransactionRepository;
 
     @Autowired
-    private HdfcBankTransactionRepository hdfcBankTransactionRepository;
+    private BankAccountTransactionRepository bankAccountTransactionRepository;
 
     @Override
-    public BankTransaction process(HdfcBankTransaction hdfcTransaction) {
-        log.debug("hdfcTransaction: {}", hdfcTransaction);
+    public BankTransaction process(BankAccountTransaction bankTransaction) {
+        log.debug("bankAccountTransaction: {}", bankTransaction);
         BankTransaction myGateBankTransaction = null;
-        if (hdfcTransaction.getUtrNo() != null) {
-            myGateBankTransaction = bankTransactionRepository.findOneByUtrNo(hdfcTransaction.getUtrNo());
+        if (bankTransaction.getUtrNo() != null) {
+            myGateBankTransaction = bankTransactionRepository.findOneByUtrNo(bankTransaction.getUtrNo());
             if (myGateBankTransaction != null) {
-               myGateBankTransaction.setBankDate(hdfcTransaction.getBankDate());
+               myGateBankTransaction.setBankDate(bankTransaction.getBankDate());
             }
         }
 
         // save for later MyGate batch processing will query and get the info - if needed
-        hdfcBankTransactionRepository.save(hdfcTransaction);
+        bankAccountTransactionRepository.save(bankTransaction);
 
         if (myGateBankTransaction == null || myGateBankTransaction.getDebit() == 0.0) {
             // this will skip the record to go to writer

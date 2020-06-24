@@ -1,7 +1,7 @@
 package com.alok.spring.batch.mygate.accountreconciler.utils;
 
-import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.ss.usermodel.Row;
 
 public interface RowExtractor<T> {
-    T extract(HSSFRow row);
+    T extract(Row row);
 }

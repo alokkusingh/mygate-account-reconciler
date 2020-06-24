@@ -9,8 +9,8 @@ import java.text.SimpleDateFormat;
 import java.util.regex.Pattern;
 
 @Slf4j
-public class HdfcRowExtractor implements RowExtractor<BankAccountTransaction> {
-    private String rowStartRegex = "[0-9]{2}/[0-9]{2}/[0-9]{2}";
+public class IdfcRowExtractor implements RowExtractor<BankAccountTransaction> {
+    private String rowStartRegex = "[0-9]{2}-[a-zA-Z]{3}-[0-9]{4}";
 
     @SneakyThrows
     @Override
@@ -20,8 +20,8 @@ public class HdfcRowExtractor implements RowExtractor<BankAccountTransaction> {
                 && Pattern.matches(rowStartRegex,row.getCell(0).toString())) {
 
             return BankAccountTransaction.builder()
-                    .bankDate(new SimpleDateFormat("dd/MM/yy").parse(row.getCell(0).getStringCellValue()))
-                    .utrNo(row.getCell(2).getStringCellValue())
+                    .bankDate(new SimpleDateFormat("dd-MMM-yyyy").parse(row.getCell(0).getStringCellValue()))
+                    .utrNo(row.getCell(2).getStringCellValue().split("/")[1])
                     .build();
         }
 

@@ -32,12 +32,19 @@ public class MygateAccountReconcilerApplication {
 	private FileScanner hdfcFileScanner;
 
 	@Autowired
+	private FileScanner idfcFileScanner;
+
+	@Autowired
 	@Qualifier("MyGateReconcileTransactionJob")
 	private Job myGateReconcileTransactionJob;
 
 	@Autowired
 	@Qualifier("HdfcReconcileTransactionJob")
 	private Job hdfcReconcileTransactionJob;
+
+	@Autowired
+	@Qualifier("IdfcReconcileTransactionJob")
+	private Job idfcReconcileTransactionJob;
 
 	private JobExecution myGateJobExecution;
 	private JobExecution hdfcJobExecution;
@@ -51,7 +58,7 @@ public class MygateAccountReconcilerApplication {
 
 
 	@LogExecutionTime
-	@Scheduled(cron = "1 * * * * ?")
+	@Scheduled(cron = "0 * * * * ?")
 	public void performMyGateBankTransactionLoad() throws Exception
 	{
 		List<String> files = myGateFileScanner.getFiles();
@@ -70,7 +77,7 @@ public class MygateAccountReconcilerApplication {
 	}
 
 	@LogExecutionTime
-	@Scheduled(cron = "30 * * * * ?")
+	@Scheduled(cron = "20 * * * * ?")
 	public void performHdfcBankTransactionLoad() throws Exception
 	{
 		List<String> files = hdfcFileScanner.getFiles();
@@ -84,6 +91,25 @@ public class MygateAccountReconcilerApplication {
 
 			synchronized (mutex) {
 				hdfcJobExecution = jobLauncher.run(hdfcReconcileTransactionJob, params);
+			}
+		}
+	}
+
+	@LogExecutionTime
+	@Scheduled(cron = "40 * * * * ?")
+	public void performIdfcBankTransactionLoad() throws Exception
+	{
+		List<String> files = idfcFileScanner.getFiles();
+		log.info("Got files: {}", files);
+		for (String file: files) {
+			JobParameters params = new JobParametersBuilder()
+					.addString("JobName", "IdfcTransactionReconciliationJob")
+					.addString("JobID", String.valueOf(System.currentTimeMillis()))
+					.addString("FileName", file)
+					.toJobParameters();
+
+			synchronized (mutex) {
+				hdfcJobExecution = jobLauncher.run(idfcReconcileTransactionJob, params);
 			}
 		}
 	}

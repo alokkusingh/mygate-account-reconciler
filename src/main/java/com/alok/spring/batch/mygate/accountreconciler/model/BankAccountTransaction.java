@@ -14,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class HdfcBankTransaction {
+public class BankAccountTransaction {
     @Id
     private String utrNo;
     private Date bankDate;
