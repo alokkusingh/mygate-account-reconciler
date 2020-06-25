@@ -80,15 +80,10 @@ public class ExcelxReader<T> implements ResourceAwareItemReaderItemStream {
     private void readLines() throws IOException {
         items = new LinkedList<>();
 
-        // Create a POIFSFileSystem object
-       // POIFSFileSystem myFileSystem = new POIFSFileSystem(sheetInputFile);
-
         // Create a workbook using the File System
-        //HSSFWorkbook myWorkBook = new HSSFWorkbook(myFileSystem);
         XSSFWorkbook myWorkBook = new XSSFWorkbook(sheetInputFile);
 
         // Get the first sheet from workbook
-       // HSSFSheet mySheet = myWorkBook.getSheetAt(0);
         XSSFSheet mySheet = myWorkBook.getSheet("Account Statement");
 
         //Row iterator
