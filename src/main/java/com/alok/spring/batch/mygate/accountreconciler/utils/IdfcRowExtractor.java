@@ -21,10 +21,20 @@ public class IdfcRowExtractor implements RowExtractor<BankAccountTransaction> {
 
             return BankAccountTransaction.builder()
                     .bankDate(new SimpleDateFormat("dd-MMM-yyyy").parse(row.getCell(0).getStringCellValue()))
-                    .utrNo(row.getCell(2).getStringCellValue().split("/")[1])
+                    .withdrawalAmount(row.getCell(4).getStringCellValue())
+                    .depositAmount(row.getCell(5).getStringCellValue())
+                    .narration(row.getCell(2).getStringCellValue())
+                    .utrNo(extractUtrNo(row.getCell(2).getStringCellValue()))
                     .build();
         }
 
         return null;
+    }
+
+    private String extractUtrNo(String narration) {
+        if (narration.split("/")[0].equals("NEFT"))
+            return narration.split("/")[1];
+
+        return narration.split("/")[2];
     }
 }

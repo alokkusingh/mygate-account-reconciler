@@ -100,7 +100,9 @@ public class MyGateAccountReconcilerConfig {
                         || line.startsWith("Opening Balance")
                         || line.startsWith("Id,Date,Doc")
                         || line.contains("Txn Id:")
-                        || line.contains("Payment");
+                        //|| line.contains("Payment")
+                        || line.contains("Ref: ")
+                        ;
             }
 
             @Override

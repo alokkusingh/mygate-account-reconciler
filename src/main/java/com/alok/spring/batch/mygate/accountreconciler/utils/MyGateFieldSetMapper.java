@@ -21,6 +21,7 @@ public class MyGateFieldSetMapper implements FieldSetMapper<BankTransaction> {
     @Override
     public BankTransaction mapFieldSet(FieldSet fieldSet) {
         try {
+            log.debug("Raw record: {}", fieldSet.toString());
             BankTransaction transaction = BankTransaction.builder()
                     .id(fieldSet.readLong("id"))
                     .date(fieldSet.readDate("date"))
@@ -41,7 +42,7 @@ public class MyGateFieldSetMapper implements FieldSetMapper<BankTransaction> {
             log.error("Error parsing record: {}", fieldSet.toString());
             log.error(e.getMessage(), e);
         }
-        return null;
+        return new BankTransaction();
     }
 
     private void enrichTransaction(BankTransaction transaction) {
@@ -69,6 +70,7 @@ public class MyGateFieldSetMapper implements FieldSetMapper<BankTransaction> {
                 new String[] {
                         // replace comma from pattern to empty
                         "(?<=UTR NO.)\\w+",
+                        "(?<=Ref: )\\w+",
                 }
         );
         return fieldExtractor;
