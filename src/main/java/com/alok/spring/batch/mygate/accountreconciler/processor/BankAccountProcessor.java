@@ -33,7 +33,7 @@ public class BankAccountProcessor implements ItemProcessor<BankAccountTransactio
         // save for later MyGate batch processing will query and get the info - if needed
         bankAccountTransactionRepository.save(bankTransaction);
 
-        if (myGateBankTransaction == null || myGateBankTransaction.getDebit() == 0.0) {
+        if (myGateBankTransaction == null) {
             // this will skip the record to go to writer
             return null;
         }
