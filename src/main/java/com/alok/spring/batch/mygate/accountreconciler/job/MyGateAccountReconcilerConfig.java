@@ -14,6 +14,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.step.skip.SkipPolicy;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -51,6 +52,9 @@ public class MyGateAccountReconcilerConfig {
     @Autowired
     private ReconcileReport reconcileReport;
 
+    @Autowired
+    private SkipPolicy skipRecordOnErrorPolicy;
+
     @Bean("MyGateReconcileTransactionJob")
     public Job myGateReconcileTransactionJob(JobBuilderFactory jobBuilderFactory,
                                           StepBuilderFactory stepBuilderFactory,
@@ -63,6 +67,7 @@ public class MyGateAccountReconcilerConfig {
                 .reader(myGateAccountItemReader)
                 .processor(myGateAccountProcessor)
                 .writer(myGateReconcileTransactionWriter)
+                .faultTolerant().skipPolicy(skipRecordOnErrorPolicy)
                 .build();
 
         Step step1 = stepBuilderFactory.get("MyGate-ETL-file-archive")
@@ -101,6 +106,8 @@ public class MyGateAccountReconcilerConfig {
                         || line.startsWith("Id,Date,Doc")
                         || line.contains("Txn Id:")
                         //|| line.contains("Payment")
+                        //|| line.contains("Payment Voucher")
+                        || line.contains(",None,")
                         || line.contains("Ref: ")
                         ;
             }

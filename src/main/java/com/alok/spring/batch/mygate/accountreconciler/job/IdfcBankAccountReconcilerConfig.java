@@ -14,6 +14,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.step.skip.SkipPolicy;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -34,6 +35,9 @@ public class IdfcBankAccountReconcilerConfig {
     @Autowired
     private ReconcileReport reconcileReport;
 
+    @Autowired
+    private SkipPolicy skipRecordOnErrorPolicy;
+
     @Bean("IdfcReconcileTransactionJob")
     public Job idfcReconcileTransactionJob(JobBuilderFactory jobBuilderFactory,
                                              StepBuilderFactory stepBuilderFactory,
@@ -46,6 +50,7 @@ public class IdfcBankAccountReconcilerConfig {
                 .reader(idfcExcelReader)
                 .processor(bankAccountProcessor)
                 .writer(myGateReconcileTransactionWriter)
+                .faultTolerant().skipPolicy(skipRecordOnErrorPolicy)
                 .build();
 
 
