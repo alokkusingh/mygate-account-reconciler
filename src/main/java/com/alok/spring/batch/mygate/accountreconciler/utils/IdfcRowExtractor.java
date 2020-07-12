@@ -32,6 +32,9 @@ public class IdfcRowExtractor implements RowExtractor<BankAccountTransaction> {
     }
 
     private String extractUtrNo(String narration) {
+        if (narration.split("/").length == 1)
+            return narration;
+
         if (narration.split("/")[0].equals("NEFT"))
             return narration.split("/")[1];
 
