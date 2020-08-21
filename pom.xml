@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.alok.spring.batch.mygate</groupId>
 	<artifactId>account-reconciler</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>mygate-account-reconciler</name>
 	<description>MyGate Bank Account Reconciler</description>
 
