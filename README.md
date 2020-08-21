@@ -6,5 +6,5 @@ MyGate Bank transactions reconciliation against actual bank transaction
 
 ### How to run 
 
-`java -jar target/account-reconciler-0.0.1-SNAPSHOT.jar`
+`java -jar target/account-reconciler-1.0.0.jar`
 
